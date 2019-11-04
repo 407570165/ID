@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
     int number =0;
     int mail =0;
     int count=0;
+    private String message;
+    private String message2;
+    private String message3;
+    private ImageView smile;
+    private ImageView smiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +44,10 @@ public class MainActivity extends AppCompatActivity {
         ed_mail = findViewById(R.id.editMail);
         summit = findViewById(R.id.summit);
         countN = findViewById(R.id.countNumber);
-        countM = findViewById(R.id.countMail);
+        countM = findViewById(R.id.mail);
         FloatingActionButton fab = findViewById(R.id.fab);
-
+        smile = findViewById(R.id.imageView);
+        smiles = findViewById(R.id.imageView2);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,35 +70,59 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
-        String message="You guess"+count;
             if (ed_name.getText().length()<5&&ed_mail.getText().length()<8){
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("result")
+                        .setMessage("mail fail&name fail"+"\n"+"please enter again")
+                        .setPositiveButton("ok",null)
+                        .show();
+                count++;
                 number++;
                 mail++;
                 countN.setText(Integer.toString(number));
                 countM.setText(String.valueOf(mail));
-                message="name fail&mail fail";
-                listener =null;
-                count++;
+                smile.setVisibility(View.VISIBLE);
+                smiles.setVisibility(View.VISIBLE);
             }
             else if (ed_mail.getText().length()<8){
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("result")
+                        .setMessage("mail fail")
+                        .setPositiveButton("ok",null)
+                        .show();
                 mail++;
                 countM.setText(Integer.toString(mail));
                 message ="mail fail";
-                listener =null;
                 count++;
+                smiles.setVisibility(View.VISIBLE);
+                smiles.setVisibility(View.GONE);
             }
-            else if (ed_name.getText().length()>5){
+            else if (ed_name.getText().length()<5){
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("result")
+                        .setMessage("name fail")
+                        .setPositiveButton("ok",null)
+                        .show();
                 number ++;
                 countN.setText(Integer.toString(number));
-                message="number fail";
-                listener=null;
+                message ="number fail";
                 count++;
+                smiles.setVisibility(View.VISIBLE);
+                smile.setVisibility(View.GONE);
             }
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("result")
-                    .setMessage(message)
-                    .setPositiveButton("ok",listener)
-                    .show();
+            else {
+                count++;
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("result")
+                        .setMessage("you guess: "+count+"\n"+
+                                "your name is :"+ed_name.getText()+"\n"+
+                                        "your email is: "+ed_mail.getText()
+                                )
+                        .setPositiveButton("ok",listener)
+                        .show();
+                smile.setVisibility(View.GONE);
+                smiles.setVisibility(View.GONE);
+            }
         }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
